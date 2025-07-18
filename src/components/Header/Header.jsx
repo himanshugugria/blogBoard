@@ -56,7 +56,7 @@ const navItems =[
               </li>
             ) : null
             )}
-            {authStatus && (
+            {authStatus && (   // if authstatus is true then only, display logout
               <li>
                 <LogoutBtn />
               </li>

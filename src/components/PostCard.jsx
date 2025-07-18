@@ -3,7 +3,7 @@ import React from 'react'
 import appwriteService from "../appwrite/appwrite_config"
 import {Link} from 'react-router-dom'
 
-function PostCard({$id, title, featuredImage}) {
+function PostCard({$id, title, featuredImage}) {   // $id is the syntax for appwrite
     
   return (
     <Link to={`/post/${$id}`}>

@@ -3,8 +3,8 @@ import React, { useId } from 'react';
 function Input(
   { 
     label, 
-    type = 'text', 
-    className = '', 
+    type = 'text',
+    className = '',  
     ref,        // pull in the ref  
     ...props    // everything else  
   }

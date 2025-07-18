@@ -1,9 +1,15 @@
 import React from 'react'
 
-function Logo({width='100px'}) {
+function Logo({ width = '50px' }) {
   return (
-    <div>Logo</div>
-  )
+    <img
+      src="/public/logo.png"
+      alt="Logo"
+      style={{ width }}
+      className="rounded-lg shadow-sm"
+    />
+  );
 }
+
 
 export default Logo

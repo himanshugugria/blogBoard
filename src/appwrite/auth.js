@@ -8,18 +8,24 @@ export class AuthService{     // class
     constructor(){
         this.client
         .setEndpoint(config.appwriteURL)
-        .setProject(config.appwriteProjectID); // Replace with your project ID
+        .setProject(config.appwriteProjectID) // Replace with your project ID
         this.account = new Account(this.client);
     }
 
     async createAccount({email,password,name}){
         try {
             const userAccount = await this.account.create(ID.unique(),email,password,name);
+            console.log("account created",userAccount);
+            
             if(userAccount){
                 // return user or directly usko login karwado 
-
+                const session = await this.login({email,password});
+                console.log("session created",session);
+                
+                return session;
             }
         } catch (error) {
+            console.log("appwrite auth issue");
             return error;
         }
     }
@@ -27,6 +33,7 @@ export class AuthService{     // class
     async login({email,password}){
         try {
             return await this.account.createEmailPasswordSession(email,password);
+            
         } catch (error) {
             throw error;
         }
@@ -34,7 +41,7 @@ export class AuthService{     // class
 
     async getCurrentUser(){
         try {
-            await this.account.get();
+            return await this.account.get();
         } catch (error) {
             throw error;
         }

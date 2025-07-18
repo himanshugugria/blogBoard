@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../appwrite/auth";
-import { Button, Input, Logo } from "./index";
+import Input from './Input'
+import Logo from './Logo'
+import Button from "./Button";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice";
 import { useForm } from "react-hook-form";
@@ -18,15 +20,19 @@ function Signup() {
         setError("");
         try {
             const userData = await authService.createAccount(data);   // the only change(wrt Login.jsx) is here in the create function createAccount is passed instead of login
-
+            console.log(userData);
+            
             if (userData) {
                 const userData = await authService.getCurrentUser();
-
+                console.log(userData);
+                
                 if (userData) dispatch(login(userData));
                 navigate("/");
             }
         } catch (error) {
             setError(error.message);
+            console.log("error while creating user");
+            
         }
     }
 

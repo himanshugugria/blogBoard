@@ -3,7 +3,9 @@
 // useNavigate is a hook that allows you to navigate to a different route in your application.
 import { Link, useNavigate } from "react-router-dom";
 import {login as authLogin} from '../store/authSlice'
-import {Button,Input, Logo} from './index'
+import Input from './Input'
+import Logo from './Logo'
+import Button from "./Button";
 import {useDispatch} from 'react-redux'
 import {useState} from 'react'
 import authService from "../appwrite/auth";

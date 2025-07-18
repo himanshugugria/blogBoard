@@ -1,4 +1,4 @@
-import { Client,ID,Databases,Storage } from "appwrite";
+import { Client,ID,Databases,Storage,Query,Permission,Role } from "appwrite";
 import config from "../config/config";
 
 export class Service{
@@ -8,24 +8,24 @@ export class Service{
 
     constructor(){
         this.client
-        .setEndpoint('config.appwriteURL')
-        .setProject('config.appwriteProjectID'); // Replace with your project ID
-        this.databases = new Databases(client);
-        this.buckets = new Storage(client);
+        .setEndpoint(config.appwriteURL)
+        .setProject(config.appwriteProjectID); // Replace with your project ID
+        this.databases = new Databases(this.client);
+        this.buckets = new Storage(this.client);
     }
 
-    async createPost({title, slug, content, featuredImage, status, userId}){
+    async createPost({title, slug, content, featuredImage, status, userID}){
         try {
             return await this.databases.createDocument(
-                config.appwriteDatabaseId,
-                config.appwriteCollectionId,
+                config.appwriteDatabaseID,
+                config.appwriteCollectionID,
                 slug,
                 {
                     title,
                     content,
                     featuredImage,
                     status,
-                    userId,
+                    userID,
                 }
             )
         } catch (error) {
@@ -37,7 +37,7 @@ export class Service{
         try {
             await this.databases.updateDocument(
                 config.appwriteDatabaseID,
-                config.appwriteCollectionId,
+                config.appwriteCollectionID,
                 slug,
                 {
                     title,
@@ -68,8 +68,8 @@ export class Service{
     async getPost(slug){
         try {
             return await this.databases.getDocument(
-                config.appwriteDatabaseId,
-                config.appwriteCollectionId,
+                config.appwriteDatabaseID,
+                config.appwriteCollectionID,
                 slug
             
             )
@@ -82,8 +82,8 @@ export class Service{
     async getPosts(queries = [Query.equal("status", "active")]){
         try {
             return await this.databases.listDocuments(
-                config.appwriteDatabaseId,
-                config.appwriteCollectionId,
+                config.appwriteDatabaseID,
+                config.appwriteCollectionID,
                 queries,
                 
 
@@ -100,12 +100,13 @@ export class Service{
     async uploadFile(file){
         try {
             return await this.buckets.createFile(
-                config.appwriteBucketId,
+                config.appwriteBucketID,
                 ID.unique(),
-                file
+                file,
+                // [Permission.read(Role.any())]     // to set permision while uploading the file to read by all users, then only can we render images in Post and Postcard.
             )
         } catch (error) {
-            console.log("Appwrite serive :: uploadFile :: error", error);
+            console.log("Appwrite service :: uploadFile :: error", error);
             return false
         }
     }
@@ -113,7 +114,7 @@ export class Service{
     async deleteFile(fileId){
         try {
             await this.buckets.deleteFile(
-                config.appwriteBucketId,
+                config.appwriteBucketID,
                 fileId
             )
             return true
@@ -124,7 +125,7 @@ export class Service{
     }
 
     getFilePreview(fileId){
-        return this.buckets.getFileView(conf.appwriteBucketId, fileId)
+        return this.buckets.getFileView(config.appwriteBucketID, fileId)
     }
 }
 
